@@ -1,0 +1,809 @@
+<html lang="en">
+  <head>
+    <title>CryptoRadar Dark Map</title>
+    <style>
+      /* Mapa ultra oscuro */
+      #map {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+      }
+
+      #view-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 400;
+        background: rgba(20, 25, 35, 0.8);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        transition: all 0.3s ease;
+      }
+
+      #view-toggle:hover {
+        background: rgba(255, 215, 0, 0.3);
+      }
+
+      #view-toggle:active {
+        transform: scale(0.95);
+      }
+
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: 'Arial', sans-serif;
+      }
+
+      #clouds-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,240,240,0.95) 100%);
+        z-index: 100;
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 5s ease-out;
+      }
+
+      #crypto-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 300;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 2s ease-in;
+      }
+
+      #crypto-overlay.visible {
+        opacity: 1;
+      }
+
+      #crypto-container {
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 2s ease-in-out;
+      }
+
+      #crypto-container.final-position {
+        top: 15%;
+        transform: translate(-50%, 0) scale(0.5);
+      }
+
+      #crypto-symbol {
+        font-size: 150px;
+        color: #FFD700;
+        margin-bottom: 30px;
+        animation: float 4s ease-in-out infinite;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.7),
+                     0 0 40px rgba(255, 215, 0, 0.4);
+      }
+
+      #crypto-text {
+        font-size: 70px;
+        font-weight: bold;
+        color: #FFD700;
+        text-transform: uppercase;
+        letter-spacing: 8px;
+        animation: glow 2.5s ease-in-out infinite alternate;
+      }
+
+      /* Menu overlay */
+      #menu-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 200;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 1s ease-in;
+      }
+
+      #menu-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      #menu-container {
+        text-align: center;
+        color: white;
+        max-width: 600px;
+        padding: 30px;
+        background: rgba(20, 25, 35, 0.7);
+        border-radius: 15px;
+        margin-top: 120px; 
+      }
+
+      #menu-container h2 {
+        font-size: 24px;
+        margin-bottom: 30px;
+        color: white;
+      }
+
+      .menu-options {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .menu-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 20px 30px;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .menu-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 215, 0, 0.5);
+      }
+
+      .bitcoin-symbol {
+        color: white;
+        font-size: 28px;
+      }
+
+      #atm-list {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        width: 300px;
+        max-height: calc(100% - 40px);
+        background: rgba(20, 25, 35, 0.8);
+        border-radius: 10px;
+        z-index: 400;
+        overflow-y: auto;
+        display: none;
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      #atm-list-header {
+        padding: 15px;
+        background: rgba(255, 215, 0, 0.2);
+        border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #atm-list h3 {
+        margin: 0;
+        color: #FFD700;
+      }
+
+      #close-list {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      #atm-list-content {
+        padding: 10px;
+      }
+
+      .atm-item {
+        padding: 12px;
+        margin-bottom: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .atm-item:hover {
+        background: rgba(255, 215, 0, 0.1);
+      }
+
+      .atm-item.active {
+        background: rgba(255, 215, 0, 0.2);
+        border-left: 3px solid #FFD700;
+      }
+
+      .atm-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #FFD700;
+      }
+
+      .atm-address {
+        font-size: 12px;
+        color: #aaa;
+      }
+
+      #route-panel {
+        position: absolute;
+        left: 20px;
+        bottom: 20px;
+        width: 300px;
+        background: rgba(20, 25, 35, 0.8);
+        border-radius: 10px;
+        z-index: 400;
+        color: white;
+        padding: 15px;
+        display: none;
+        justify-self: anchor-center;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      #route-panel h3 {
+        margin-top: 0;
+        color: #FFD700;
+      }
+
+      #get-route-btn {
+        background: rgba(255, 215, 0, 0.3);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: all 0.2s ease;
+      }
+
+      #get-route-btn:hover {
+        background: rgba(255, 215, 0, 0.5);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @keyframes float {
+        0% { transform: translateY(0px) rotateY(0deg) scale(1); }
+        50% { transform: translateY(-30px) rotateY(10deg) scale(1.05); }
+        100% { transform: translateY(0px) rotateY(0deg) scale(1); }
+      }
+
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 10px #FFD700, 
+                       0 0 20px rgba(255, 215, 0, 0.7),
+                       0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        to {
+          text-shadow: 0 0 15px #FFD700, 
+                       0 0 25px rgba(255, 215, 0, 0.8),
+                       0 0 35px rgba(255, 215, 0, 0.6),
+                       0 0 45px rgba(255, 215, 0, 0.4);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <div id="clouds-overlay"></div>
+    <div id="crypto-overlay" class="hidden">
+      <div id="crypto-container">
+        <div id="crypto-symbol">₿</div>
+        <div id="crypto-text">CRYPTORADAR</div>
+      </div>
+    </div>
+    <div id="menu-overlay" class="hidden">
+      <div id="menu-container">
+        <h2>Selecciona una ubicación</h2>
+        <div class="menu-options">
+          <button id="las-palmas-btn" class="menu-btn">
+            <span class="bitcoin-symbol">₿</span> Las Palmas
+          </button>
+          <button id="telde-btn" class="menu-btn">
+            <span class="bitcoin-symbol">₿</span> Telde
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div id="atm-list">
+      <div id="atm-list-header">
+        <h3>Cajeros disponibles</h3>
+        <button id="close-list">&times;</button>
+      </div>
+      <div id="atm-list-content"></div>
+    </div>
+    
+    <div id="route-panel">
+      <h3>Obtener ruta</h3>
+      <p id="selected-atm-info">Selecciona un cajero para ver la ruta</p>
+      <button id="get-route-btn">Mostrar ruta desde mi ubicación</button>
+    </div>
+
+    <button id="view-toggle">3D</button>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@18.6.4/dist/tween.umd.js"></script>
+    <script>
+      let map;
+      let markers = [];
+      let modelElements = [];
+      let infoWindows = [];
+      let selectedMarker = null;
+      let directionsService;
+      let directionsRenderer;
+      const cameraOptions = {
+          tilt: 0,
+          heading: 0,
+          zoom: 8,
+          center: { lat: 28.1248, lng: -15.4300 },
+      };
+
+      let bankData;
+
+
+      fetch('cajeros_bitcoin.json')
+          .then(response => response.json())
+          .then(data => {
+          bankData = data;
+          initMap();
+          })
+          .catch(error => console.error('Error loading bank data:', error));
+
+      const ultraDarkStyle = [
+        { elementType: "geometry", stylers: [{ color: "#0e1621" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#0e1621" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#6b6b6b" }] },
+        {
+          featureType: "administrative",
+          elementType: "geometry",
+          stylers: [{ visibility: "off" }]
+        },
+        {
+          featureType: "administrative.locality",
+          elementType: "labels.text.fill",
+          stylers: [{ color: "#9e9e9e" }]
+        },
+        {
+          featureType: "poi",
+          elementType: "labels.text.fill",
+          stylers: [{ color: "#757575" }, { visibility: "simplified" }]
+        },
+        {
+          featureType: "road",
+          elementType: "geometry",
+          stylers: [{ color: "#1a2332" }, { visibility: "simplified" }]
+        },
+        {
+          featureType: "road",
+          elementType: "labels.text.fill",
+          stylers: [{ color: "#7a7a7a" }]
+        },
+        {
+          featureType: "road.highway",
+          elementType: "geometry",
+          stylers: [{ color: "#232f3e" }, { visibility: "simplified" }]
+        },
+        {
+          featureType: "water",
+          elementType: "geometry",
+          stylers: [{ color: "#0e1a2b" }]
+        },
+        {
+          featureType: "water",
+          elementType: "labels.text.fill",
+          stylers: [{ color: "#4e5d6c" }]
+        },
+        {
+          featureType: "transit",
+          elementType: "geometry",
+          stylers: [{ color: "#1a2332" }, { visibility: "off" }]
+        }
+      ];
+
+      const mapOptions = {
+        ...cameraOptions,
+        mapId: "15431d2b469f209e",
+        styles: ultraDarkStyle,
+        disableDefaultUI: true,
+        zoomControl: false,
+        streetViewControl: false,
+        fullscreenControl: false
+      };
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        map.setOptions({ styles: ultraDarkStyle });
+        
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({
+          map: map,
+          suppressMarkers: true,
+          preserveViewport: true,
+          polylineOptions: {
+            strokeColor: "#FFD700",
+            strokeOpacity: 0.8,
+            strokeWeight: 4
+          }
+        });
+
+        const viewToggleBtn = document.getElementById('view-toggle');
+        
+        let viewState = 1;
+        
+        function toggleView() {
+            const currentCenter = map.getCenter();
+            const currentZoom = map.getZoom();
+            const currentHeading = map.getHeading() || 0;
+            const currentTilt = map.getTilt() || 0;
+
+            const targetTilt = viewState === 1 ? 0 : 65;
+            const targetHeading = viewState === 1 ? 0 : 90; 
+
+            viewState = viewState === 1 ? 0 : 1;
+
+            viewToggleBtn.textContent = viewState === 1 ? '2D' : '3D';
+
+            map.moveCamera({
+                center: currentCenter,
+                zoom: currentZoom,
+                heading: targetHeading,
+                tilt: targetTilt
+            });
+        }
+        const cloudsOverlay = document.getElementById('clouds-overlay');
+        cloudsOverlay.style.opacity = 1;
+        
+        const cryptoOverlay = document.getElementById('crypto-overlay');
+        const cryptoContainer = document.getElementById('crypto-container');
+        const menuOverlay = document.getElementById('menu-overlay');
+        const lasPalmasBtn = document.getElementById('las-palmas-btn');
+        const teldeBtn = document.getElementById('telde-btn');
+        const closeListBtn = document.getElementById('close-list');
+        const getRouteBtn = document.getElementById('get-route-btn');
+        
+        setTimeout(() => {
+          cloudsOverlay.style.opacity = 0;
+        }, 1500);
+
+        viewToggleBtn.addEventListener('click', toggleView);
+                
+        setTimeout(() => {
+          new TWEEN.Tween(cameraOptions)
+            .to({ tilt: 65, heading: 90, zoom: 18 }, 15000)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .onUpdate(() => {
+              map.moveCamera(cameraOptions);
+            })
+            .onComplete(() => {
+              cryptoOverlay.classList.add('visible');
+              
+              const symbol = document.getElementById('crypto-symbol');
+              setInterval(() => {
+                symbol.style.textShadow = `0 0 ${15 + Math.random() * 15}px rgba(255, 215, 0, ${0.5 + Math.random() * 0.3})`;
+              }, 2000);
+              setTimeout(() => {
+                cryptoContainer.classList.add('final-position');        
+                setTimeout(() => {
+                  menuOverlay.classList.add('visible');
+                }, 2000);
+              }, 1000);
+            })
+            .start();
+        }, 1500);
+
+        lasPalmasBtn.addEventListener('click', () => showLocation('Las Palmas'));
+        teldeBtn.addEventListener('click', () => showLocation('Telde'));
+        closeListBtn.addEventListener('click', () => {
+          document.getElementById('atm-list').style.display = 'none';
+          document.getElementById('route-panel').style.display = 'none';
+        });
+        getRouteBtn.addEventListener('click', getRouteToSelectedATM);
+
+        function animate(time) {
+          requestAnimationFrame(animate);
+          TWEEN.update(time);
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      function showLocation(location) {
+        document.getElementById('menu-overlay').classList.remove('visible');
+        document.getElementById('crypto-overlay').classList.remove('visible');
+        clearMarkers();
+        clearInfoWindows();
+        
+        const data = bankData[location];
+        if (!data) return;
+        
+        map.setCenter({ lat: data.location[0], lng: data.location[1] });
+        map.setZoom(16);
+        
+        const bankColors = {
+          "CaixaBank": "#FF0000",
+          "Santander": "#EC1C24",
+          "BBVA": "#004481",
+          "Bankinter": "#F7931E",
+          "ABANCA": "#0066B3",
+          "ING": "#FF6200",
+          "Cajamar": "#00A0E3",
+          "Ibercaja": "#00A0E0",
+          "Sabadell": "#ED1C24",
+          "Otros": "#FFD700"
+        };
+
+        const bitcoinMarker = addMarkerBitCoin(
+            data.location, 
+            data.name, 
+            "₿", 
+            "#FFD700",
+            );
+        
+        const atmListContent = document.getElementById('atm-list-content');
+        atmListContent.innerHTML = '';
+        
+        addATMToList(data.name, "Cajero Bitcoin", data.location, bitcoinMarker);
+        
+        Object.entries(data.banks).forEach(([bankName, branches]) => {
+          branches.forEach(branch => {
+            const marker = addMarker(
+              branch.location,
+              `${branch.name}\n${branch.address}`,
+              bankName.charAt(0),
+              bankColors[bankName] || "#FFD700",
+              null,
+              0.7
+            );
+            
+            // Añadir a la lista
+            addATMToList(branch.name, branch.address, branch.location, marker, bankName);
+          });
+        });
+        
+        // Mostrar lista y panel de ruta
+        document.getElementById('atm-list').style.display = 'block';
+        document.getElementById('route-panel').style.display = 'block';
+      }
+
+      function addATMToList(name, address, location, marker, bankName = null) {
+    const atmListContent = document.getElementById('atm-list-content');
+    const atmItem = document.createElement('div');
+    atmItem.className = 'atm-item';
+    
+    const nameElement = document.createElement('div');
+    nameElement.className = 'atm-name';
+    nameElement.textContent = name;
+    if (bankName) nameElement.textContent += ` (${bankName})`;
+    
+    const addressElement = document.createElement('div');
+    addressElement.className = 'atm-address';
+    addressElement.textContent = address;
+    
+    atmItem.appendChild(nameElement);
+    atmItem.appendChild(addressElement);
+    atmListContent.appendChild(atmItem);
+    
+    atmItem.addEventListener('click', () => {
+      document.querySelectorAll('.atm-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      atmItem.classList.add('active');
+      
+      const targetPosition = marker.getPosition();
+      const currentCenter = map.getCenter();
+      
+      const animationState = {
+        lat: currentCenter.lat(),
+        lng: currentCenter.lng(),
+        zoom: map.getZoom()
+      };
+      
+      new TWEEN.Tween(animationState)
+        .to({
+          lat: targetPosition.lat(),
+          lng: targetPosition.lng(),
+          zoom: 18
+        }, 1000) 
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => {
+          map.setCenter(new google.maps.LatLng(animationState.lat, animationState.lng));
+          map.setZoom(animationState.zoom);
+        })
+        .onComplete(() => {
+          infoWindows.forEach(iw => iw.close());
+          const iw = infoWindows.find(iw => iw.getAnchor() === marker);
+          if (iw) iw.open(map, marker);
+        })
+        .start();
+      document.getElementById('selected-atm-info').innerHTML = `
+        <strong>${name}</strong><br>
+        <small>${address}</small>
+      `;
+      
+      selectedMarker = marker;
+    });
+  }
+
+      function addMarkerBitCoin(position, title, label, color, iconUrl, opacity = 1) {
+        const marker = new google.maps.Marker({
+          position: { lat: position[0], lng: position[1] },
+          map: map,
+          title: title,
+          label: {
+            text: label,
+            color: "#FFFFFF",
+            fontSize: "28px",
+            fontWeight: "bold"
+          },
+          icon: iconUrl || {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: color,
+            fillOpacity: opacity,
+            strokeColor: "#000000",
+            strokeWeight: 1,
+            scale: 20
+          }
+        });
+        
+        markers.push(marker);
+        
+        const infoWindow = new google.maps.InfoWindow({
+          content: `<div style="color: #000; padding: 10px;"><strong>${title}</strong></div>`
+        });
+        
+        marker.addListener('click', () => {
+          infoWindows.forEach(iw => iw.close());
+          infoWindow.open(map, marker);
+          
+          document.querySelectorAll('.atm-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.querySelector('.atm-name').textContent.includes(title)) {
+              item.classList.add('active');
+            }
+          });
+        });
+        
+        infoWindows.push(infoWindow);
+        return marker;
+      }
+      
+      function addMarker(position, title, label, color, iconUrl, opacity = 1) {
+        const marker = new google.maps.Marker({
+          position: { lat: position[0], lng: position[1] },
+          map: map,
+          title: title,
+          label: {
+            text: label,
+            color: "#FFFFFF",
+            fontSize: "14px",
+            fontWeight: "bold"
+          },
+          icon: iconUrl || {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: color,
+            fillOpacity: opacity,
+            strokeColor: "#000000",
+            strokeWeight: 1,
+            scale: 10
+          }
+        });
+        
+        markers.push(marker);
+        
+        const infoWindow = new google.maps.InfoWindow({
+          content: `<div style="color: #000; padding: 10px;"><strong>${title}</strong><br>${title.split('\n')[1]}</div>`
+        });
+        
+        marker.addListener('click', () => {
+          infoWindows.forEach(iw => iw.close());
+          infoWindow.open(map, marker);
+          
+          document.querySelectorAll('.atm-item').forEach(item => {
+            item.classList.remove('active');
+            if (item.querySelector('.atm-name').textContent.includes(title.split('\n')[0])) {
+              item.classList.add('active');
+            }
+          });
+        });
+        
+        infoWindows.push(infoWindow);
+        return marker;
+      }
+      
+      function clearMarkers() {
+        markers.forEach(marker => marker.setMap(null));
+        markers = [];
+      }
+      
+      function clearInfoWindows() {
+        infoWindows.forEach(iw => iw.close());
+        infoWindows = [];
+      }
+      
+      function getRouteToSelectedATM() {
+        if (!selectedMarker) return;
+        
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
+              
+              const userMarker = new google.maps.Marker({
+                position: userLocation,
+                map: map,
+                title: "Tu ubicación",
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  fillColor: "#4285F4",
+                  fillOpacity: 1,
+                  strokeColor: "#FFFFFF",
+                  strokeWeight: 2,
+                  scale: 10
+                }
+              });
+              
+              markers.push(userMarker);
+              
+              directionsService.route({
+                origin: userLocation,
+                destination: selectedMarker.getPosition(),
+                travelMode: google.maps.TravelMode.WALKING
+              }, (response, status) => {
+                if (status === 'OK') {
+                  directionsRenderer.setDirections(response);
+                  
+                  const bounds = new google.maps.LatLngBounds();
+                  bounds.extend(userLocation);
+                  bounds.extend(selectedMarker.getPosition());
+                  map.fitBounds(bounds, {padding: 100});
+                } else {
+                  alert('No se pudo calcular la ruta: ' + status);
+                }
+              });
+            },
+            (error) => {
+              alert('Error al obtener tu ubicación: ' + error.message);
+            }
+          );
+        } else {
+          alert("Tu navegador no soporta geolocalización");
+        }
+      }
+
+      window.initMap = initMap;
+    </script>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyATzgMpq4NUq0Y89yytAMKg6xmVQ9fcWF4&callback=initMap&v=weekly&libraries=marker,directions" defer></script>
+  </body>
+</html>
