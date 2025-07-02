@@ -1,0 +1,333 @@
+{
+  "Las Palmas": {
+    "name": "Bitcoin ATM - Las Palmas",
+    "location": [
+      28.1419251,-15.4277324
+    ],
+    "banks": {
+      "CaixaBank": [
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "C. Luis Doreste Silva, Las Palmas",
+          "location": [
+            28.1182091,-15.4232125
+          ]
+        },
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "C. Pl. Barranco de la Ballena, Las Palmas",
+          "location": [
+            28.12134,-15.4444542
+          ]
+        },
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "Av. Federico García Lorca, Las Palmas",
+          "location": [
+            28.1231761,-15.4411806
+          ]
+        },
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "Ctra. del Rincón, Las Palmas",
+          "location": [
+            28.1284829,-15.4487487
+          ]
+        },
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "Av. José Mesa y López, 15, Las Palmas",
+          "location": [
+            28.1345736,-15.4326942
+          ]
+        },
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "Esq.Ps.S.Artiles, C. José Franchy Roca, Las Palmas",
+          "location": [
+            28.1388747,-15.4321125
+          ]
+        },
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "Muelle de Sta. Catalina, Las Palmas",
+          "location": [
+            28.1417195,-15.4269905
+          ]
+        }
+      ],
+      "Santander": [
+        {
+          "name": "Cajero Euro Automatic Cash Santander",
+          "address": "C. León y Castillo, 270, Las Palmas",
+          "location": [
+            28.1246724,-15.4286008
+          ]
+        },
+        {
+          "name": "Cajero Automático Banco Santander",
+          "address": "C. Luis Doreste Silva, 46, Las Palmas",
+          "location": [
+            28.1184212,-15.4233981
+          ]
+        },
+        {
+          "name": "Cajero Automático Banco Santander",
+          "address": "Av. Escaleritas, 68, Las Palmas",
+          "location": [
+            28.1183385,-15.4373195
+          ]
+        },
+        {
+          "name": "Cajero Euro Automatic Cash Santander",
+          "address": "C.C. Las Arenas, Las Palmas",
+          "location": [
+            28.1283521,-15.4484278
+          ]
+        },
+        {
+          "name": "Cajero Banco Santander",
+          "address": "Av. José Mesa y López, 21A, Las Palmas",
+          "location": [
+            28.134439,-15.4332428
+          ]
+        }
+      ],
+
+      "Bankinter": [
+        {
+          "name": "Bankinter",
+          "address": "C. Luis Doreste Silva, 83, Las Palmas",
+          "location": [
+            28.1187436,-15.4236845
+          ]
+        },
+        {
+          "name": "Bankinter",
+          "address": "C. Néstor de la Torre, 44, Las Palmas",
+          "location": [
+            28.1339458,-15.433203
+          ]
+        },
+        {
+          "name": "Bankinter",
+          "address": "C. Albareda, 2, Las Palmas",
+          "location": [
+            28.1418852,-15.430612
+          ]
+        }
+      ],
+      "ABANCA": [
+        {
+          "name": "ABANCA",
+          "address": "Esquina Avenida León y Castillo, C. Emilio Castelar, 4, 6, Las Palmas",
+          "location": [
+            28.1391528,-15.4306274
+          ]
+        }
+      ],
+      "ING": [
+        {
+          "name": "ING",
+          "address": "Av. José Mesa y López, 1, Las Palmas",
+          "location": [
+            28.1347272,-15.42932
+          ]
+        }
+      ],
+      "Cajamar": [
+        {
+          "name": "Cajamar Caja Rural",
+          "address": "C. Nicolás Estévanez, 21, Las Palmas",
+          "location": [
+            28.1395341,-15.4323896
+          ]
+        }
+      ],
+      "Ibercaja": [
+        {
+          "name": "Ibercaja",
+          "address": "C. José Franchy Roca, 5, Las Palmas",
+          "location": [
+            28.1388974,-15.4317529
+          ]
+        }
+      ],
+      "BBVA": [
+        {
+          "name": "Cajeros Automáticos BBVA",
+          "address": "Pl. del Pilar, 1, Las Palmas",
+          "location": [
+            28.1296581,-15.4441057
+          ]
+        },
+        {
+          "name": "Cajero Automático BBVA",
+          "address": "Pl. de España, 3, Las Palmas",
+          "location": [
+            28.1346811,-15.4354654
+          ]
+        },
+        {
+          "name": "Cajeros Automáticos BBVA",
+          "address": "Ml, Muelle de Sta. Catalina, 1, Las Palmas",
+          "location": [
+            28.1417264,-15.4274332
+          ]
+        },
+        {
+          "name": "Cajero Automatico BBVA",
+          "address": "C. Albareda, 6, Las Palmas",
+          "location": [
+            28.1422609,-15.4308316
+          ]
+        },
+        {
+          "name": "Cajero Automático BBVA",
+          "address": "C. Juan Rejón, 103, Las Palmas",
+          "location": [
+            28.1496113,-15.4234235
+          ]
+        }
+      ],
+      "Sabadell": [
+        {
+          "name": "Cajero Banco Sabadell",
+          "address": "Av. José Mesa y López, 45, Las Palmas",
+          "location": [
+            28.1325418,-15.4373392
+          ]
+        },
+        {
+          "name": "Cajero Banco Sabadell",
+          "address": "C. León y Castillo, 324, Las Palmas",
+          "location": [
+            28.1387226,-15.4306147
+          ]
+        },
+        {
+          "name": "Cajero Banco Sabadell",
+          "address": "C. José Franchy Roca, 5, Las Palmas",
+          "location": [
+            28.1388974,-15.4317529
+          ]
+        }
+      ]
+    }
+  },
+  "Telde": {
+    "name": "Bitcoin ATM - Telde",
+    "location": [
+      28.0119601,-15.3872511
+    ],
+    "banks": {
+      "Santander": [
+          {
+          "name": "ATM Cajero Automático Santander",
+          "address": "Av. Santa Rita de Casia, 55, Las Palmas",
+          "location": [
+            28.0335893,-15.4037415
+          ]
+        },
+        {
+          "name": "Cajero Euro Automatic Cash Santander",
+          "address": "C. García Morato, 8, Las Palmas",
+          "location": [
+            27.9855121,-15.393271
+          ]
+        },
+        {
+          "name": "Cajero Automático Banco Santander",
+          "address": "Autovia Gran Canaria 1, KM.8, Las Palmas",
+          "location": [
+            28.0113431,-15.3874555
+          ]
+        },
+        {
+          "name": "Cajero Automático Banco Santander",
+          "address": "Palmas Gando, KM. 12 Ikea",
+          "location": [
+            28.0146062,-15.3909265
+          ]
+        },
+        {
+          "name": "Cajero Automático Banco Santander",
+          "address": "GC-1, Km 8,0, Las Palmas",
+          "location": [
+            28.0113431,-15.3874555
+          ]
+        },
+        {
+          "name": "Cajero Automático Banco Santander",
+          "address": "GC-1, KM-5,5, Las Palmas",
+          "location": [
+            28.0293295,-15.3954458
+          ]
+        },
+        {
+          "name": "Cajero Euro Automatic Cash",
+          "address": "Av. Santa Rita de Casia, 5, Las Palmas",
+          "location": [
+            28.0335851,-15.4041535
+          ]
+        },
+        {
+          "name": "Cajero Automático Banco Santander",
+          "address": "C. Secretario Guedes Alemán, 3, Las Palmas",
+          "location": [
+            27.997471,-15.4139274
+          ]
+        },
+        {
+          "name": "Cajero Euro Automatic Cash",
+          "address": "C. Secretario Guedes Alemán, 14, Las Palmas",
+          "location": [
+            27.9973465,-15.4140826
+          ]
+        },
+        {
+          "name": "Cajero Automático Banco Santander",
+          "address": "C. Poeta Fernando González, 2, Las Palmas",
+          "location": [
+            27.9971216,-15.4166602
+          ]
+        }
+      ],
+      "CaixaBank": [
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "Autovia Gc-1 Km. 5, 5 Salida 6b, Las Palmas",
+          "location": [
+            28.0290362,-15.394242
+          ]
+        },
+
+        {
+          "name": "ATM CaixaBank - Cajero",
+          "address": "El Cubillo, 1, Las Palmas",
+          "location": [
+            28.0062417,-15.4144459
+          ]
+        }
+      ],
+      "BBVA": [
+        {
+          "name": "Cajero automático BBVA",
+          "address": "C. Prof. Francisco Cruz, 6, Las Palmas",
+          "location": [
+            28.0022015,-15.4138806
+          ]
+        }
+      ],
+      "Sabadell": [
+        {
+          "name": "Cajero Banco Sabadell",
+          "address": "Av. de la Constitución, S/N, Las Palmas",
+          "location": [
+            27.9978056,-15.4155997
+          ]
+        }
+      ]
+    }
+  }
+}
